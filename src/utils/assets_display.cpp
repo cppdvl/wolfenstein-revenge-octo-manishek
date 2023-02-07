@@ -35,7 +35,7 @@ namespace Application
 	
 
 
-	namespace SetTransparencies
+	namespace Util
 	{
 		void setTransparencies(sf::Image& image)
 		{
@@ -69,7 +69,7 @@ int main()
 
 	sf::Image image;
 	image.loadFromFile("resources/bmps/mguard_s_1.bmp");
-	Application::SetTransparencies::setTransparencies(image);
+	Application::Util::setTransparencies(image);
 	sf::Texture texture;
 	texture.loadFromImage(image);
 
