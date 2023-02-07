@@ -3,23 +3,36 @@ project(wlfnstn)
 
 
 if (UNIX)
-	set(CMAKE_CXX_COMPILER "clang++-11")
 	add_compile_options(-Wall -Wextra -Wpedantic -Werror -Wfatal-errors)
 endif()
 
 
-
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+#[[ STATIC SFML LIBRARY ]]
+set(SFML_STATIC_LIBRARIES TRUE)
 
-if (LINUX) 
-	find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
 
-	message (STATUS "SFML_INCLUDE_DIR: ${SFML_INCLUDE_DIR}")
-	target_include_directories(${PROJECT_NAME} PRIVATE ${SFML_INCLUDE_DIR} /usr/include/x86_64-linux-gnu /usr/local/include)
-	target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system sfml-audio)
+add_executable (assets_display src/utils/assets_display.cpp)
+
+#create directory in the build folder
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/resources/bmps)
+
+# copy a single file to build folder
+add_custom_command(TARGET assets_display POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy
+		${CMAKE_SOURCE_DIR}/resources/bmps/mguard_s_1.bmp
+		${CMAKE_BINARY_DIR}/resources/bmps/mguard_s_1.bmp)
+
+
+
+
+if (UNIX) 
+	target_include_directories(assets_display PRIVATE /usr/include/x86_64-linux-gnu /usr/local/include)
+	target_link_libraries(assets_display sfml-graphics sfml-window sfml-system sfml-audio)
 endif()
 
 
