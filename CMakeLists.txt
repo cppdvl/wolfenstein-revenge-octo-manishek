@@ -16,7 +16,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(SFML_STATIC_LIBRARIES TRUE)
 
 
-add_executable (assets_display src/utils/assets_display.cpp)
+add_executable (assets_display src/utils/assets_display.cpp src/examples/text/text_renderer.cpp)
 
 #create directory in the build folder
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/resources/bmps)
@@ -27,10 +27,14 @@ add_custom_command(TARGET assets_display POST_BUILD
 		${CMAKE_SOURCE_DIR}/resources/bmps/mguard_s_1.bmp
 		${CMAKE_BINARY_DIR}/resources/bmps/mguard_s_1.bmp)
 
+# Optional Example Files
+option (BUILD_EXAMPLES "Build the examples" ON)
+if (BUILD_EXAMPLES)
+	file (GLOB_RECURSE EXAMPLES_SRC "src/examples/*/*.cpp")
+endif()
 
 
-
-if (UNIX) 
+if (UNIX)
 	target_include_directories(assets_display PRIVATE /usr/include/x86_64-linux-gnu /usr/local/include)
 	target_link_libraries(assets_display sfml-graphics sfml-window sfml-system sfml-audio)
 endif()
