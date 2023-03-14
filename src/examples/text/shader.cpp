@@ -80,6 +80,11 @@ int main()
 	std::string vertexShaderSource = R"(
 		#version 330 core
 		layout (location = 0) in vec3 aPos;
+		layout (location = 1) in vec3 aColor;
+		layout (location = 2) in vec2 aTexCoord;
+
+		out vec3 ourColor;
+		out vec2 TexCoord;
 		void main()
 		{
 			gl_Position = vec4(aPos, 1.0);
@@ -87,6 +92,8 @@ int main()
 	)";
 	std::string fragmentShaderSource = R"(
 		#version 330 core
+		in vec3 ourColor;
+		in vec2 TexCoord;
 		out vec4 FragColor;
 		void main()
 		{
@@ -149,10 +156,15 @@ int main()
 
 
 	//Create a Triangle, at plane  z = -1.0f
+
+	//Create a Rectangl at plane z = -1.0f
 	float vertices[] = {
 		-0.5f, -0.5f, -1.0f,
 		0.5f, -0.5f, -1.0f,
-		0.0f,  0.5f, -1.0f
+		0.5f,  0.5f, -1.0f,
+		-0.5f,  0.5f, -1.0f,
+		-0.5f, -0.5f, -1.0f,
+		0.5f,  0.5f, -1.0f
 	};
 
 	//Create a Vertex Buffer Object (VBO) and Vertex Array Object (VAO)
@@ -170,7 +182,9 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 	//Copy the vertices array in a buffer for OpenGL to use (GL_STATIC_DRAW: the data will most likely not change at all or very rarely)
+	std::cout << "Vertices size: " << sizeof(vertices) << std::endl;
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
 	
 	//Now the attributes:
 	//the first parameter is the location of the attribute in the shader (layout = 0), 
@@ -200,7 +214,7 @@ int main()
 		//Draw the triangle
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);
 	
 		
